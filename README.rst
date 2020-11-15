@@ -1,6 +1,7 @@
 mlrd
 ====
-[![PyPi version](https://pypip.in/v/mlrd/badge.png)](https://pypi.org/project/mlrd/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/mlrd.svg)](https://pypi.python.org/pypi/mlrd/)
+
 
 A command line tool for downloading MyCourses lectures.
 
