@@ -5,11 +5,6 @@ import subprocess as sp
 import sys
 import shlex
 
-auth_token = ""
-course_id = 0
-output_dir = ""
-date_format = 'YYYY-MM-DD'
-
 '''
     Returns a DTO containing information about a given course's lectures.
 '''
@@ -58,7 +53,10 @@ def download(in_file, out_file, duration):
     
     print('\n')
 
-def run(course_dto):
+def run(course_id, output_dir, auth_token):
+    course_dto = get_media_recordings_dto(course_id, auth_token)
+    date_format = 'YYYY-MM-DD'
+
     for lecture in course_dto:
         date = lecture['dateTime'][:len(date_format)]
         duration = int(lecture['durationSeconds'])
@@ -78,5 +76,4 @@ def probe(in_file):
     json_object = json.loads(sp.check_output(commands, encoding='utf-8'))
     return json_object
 
-course_dto = get_media_recordings_dto(course_id, auth_token)
-run(course_dto)
+
