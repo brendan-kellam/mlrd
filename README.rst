@@ -1,3 +1,7 @@
+mlrd
+====
+[![PyPi version](https://pypip.in/v/mlrd/badge.png)](https://pypi.org/project/mlrd/)
+
 A command line tool for downloading MyCourses lectures.
 
 ## Responsible use & copyright warning
