@@ -5,7 +5,7 @@ description = "Mcgrill Lecture Recording Download (mlrd) tool"
 authors = ["Brendan <bshizzle1234@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/brendan-kellam/mlrd"
-readme = "README.rst"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
