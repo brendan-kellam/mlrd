@@ -8,7 +8,7 @@ A command line tool for downloading MyCourses lectures.
 ## Responsible use & copyright warning
 > :warning: Before using this tool, read the [university's responsible IT use document](https://www.mcgill.ca/secretariat/files/secretariat/responsible-use-of-mcgill-it-policy-on-the.pdf).
 
-> :warning: Do not share downloaded lectures without prior permissions as this is a potential breach of the professor's copyright.
+> :warning: Do not share downloaded lectures without prior permission from the owner. Sharing without permission is a potential breach of the owner's copyright.
 
 ## Prerequisites
 - [Python 3.8+](https://www.python.org/downloads/)
