@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mlrd"
-version = "0.1.3"
+version = "0.1.4"
 description = "Mcgrill Lecture Recording Download (mlrd) tool"
 authors = ["Brendan <bshizzle1234@gmail.com>"]
 license = "MIT"
