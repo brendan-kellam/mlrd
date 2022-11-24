@@ -54,11 +54,22 @@ def download(in_file, out_file, duration):
     
     print('\n')
 
-def run(course_id, output_dir, auth_token):
+def run(course_id, output_dir, auth_token, interactive=False, last_n=None):
     course_dto = get_media_recordings_dto(course_id, auth_token)
     date_format = 'YYYY-MM-DD'
+    lectures_to_download = course_dto if not interactive else []
 
-    for lecture in course_dto:
+    # interactive and last_n will NOT be used together
+    if interactive and last_n is None:
+        for lecture in course_dto:
+            print('\nLecture: {} | Date: {} | Description: {}'.format(lecture['recordingName'], lecture['dateTime'], lecture['description']))
+            if input('Download lecture? y/n: ') != 'y':
+                lectures_to_download.append(lecture)
+    
+    if last_n is not None:
+        lectures_to_download = sorted(course_dto, key=lambda x: x['dateTime'], reverse=True)[:last_n]
+
+    for lecture in lectures_to_download:
         date = lecture['dateTime'][:len(date_format)]
         duration = int(lecture['durationSeconds'])
         id = lecture['recordingInt']
