@@ -4,6 +4,7 @@ from datetime import datetime
 import subprocess as sp
 import sys
 import shlex
+from os import path, name as os_name
 
 '''
     Returns a DTO containing information about a given course's lectures.
@@ -35,8 +36,8 @@ def print_progress(percent: float, duration_down: int, total_duration: int, elap
 
 def download(in_file, out_file, duration):
     commands = shlex.split(
-        'ffmpeg -nostats -loglevel 0 -progress - -protocol_whitelist file,http,https,tcp,tls,crypto -i {} -c copy {}'.format(in_file, out_file)
-        )
+        'ffmpeg -nostats -loglevel 0 -progress - -protocol_whitelist file,http,https,tcp,tls,crypto -i {} -c copy {}'.format(in_file, out_file),
+        posix=os_name=='posix')
     start = datetime.now()
     out_time_prefix = "out_time_us="
     p = sp.Popen(commands, shell=False, stdout=sp.PIPE)
@@ -53,19 +54,32 @@ def download(in_file, out_file, duration):
     
     print('\n')
 
-def run(course_id, output_dir, auth_token):
+def run(course_id, output_dir, auth_token, interactive=False, last_n=None):
     course_dto = get_media_recordings_dto(course_id, auth_token)
     date_format = 'YYYY-MM-DD'
+    nlectures = sorted(course_dto, key=lambda x: x['dateTime'], reverse=True)[:last_n] if last_n is not None else course_dto
+    lectures_to_download = []
 
-    for lecture in course_dto:
+    if interactive:
+        for lecture in nlectures:
+            print('\nLecture: {} | Date: {} | Description: {}'.format(lecture['recordingName'], lecture['dateTime'], lecture['description']))
+            if input('Download lecture? y/n: ') != 'y':
+                lectures_to_download.append(lecture)
+    else:
+        lectures_to_download = nlectures
+
+    for lecture in lectures_to_download:
         date = lecture['dateTime'][:len(date_format)]
         duration = int(lecture['durationSeconds'])
         id = lecture['recordingInt']
-        file_name = "{}_{}.mp4".format(id, date)
+        file_name = "{}_{}_{}.mp4".format(lecture['recordingName'].replace(' ', '-'), id, date)
         print('Downloading lecture from {} to {} ...'.format(date, file_name))
 
         m3u8 = get_m3u8_stream(lecture)
-        out = output_dir + file_name
+        
+        if not path.isdir(output_dir):
+            raise RuntimeError('Output directory does not exist: {}'.format(output_dir))
+        out = path.join(output_dir, file_name)
         download(m3u8, out, duration)
 
         print('Lecture {} downloaded to {}'.format(file_name, output_dir))
